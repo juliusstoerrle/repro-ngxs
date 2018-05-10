@@ -1,8 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs/index';
-import {map} from 'rxjs/operators';
-import {catchError} from 'rxjs/internal/operators';
-import {User} from './app.state';
+import {throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +12,7 @@ export class UserService {
   getErrorObservable() {
     console.debug('UserService::getErrorObservable() called');
     // not sure what the rxjs 6.x way of creating an error observable is
-    return Observable.throw('error'); // of({abc: {id: 'abc', name: 'ABC'}});
+    return throwError(new Error('test')); // of({abc: {id: 'abc', name: 'ABC'}});
   }
 
 }

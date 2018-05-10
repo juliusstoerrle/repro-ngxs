@@ -1,7 +1,7 @@
 import {Action, State, StateContext} from '@ngxs/store';
 import {UserService} from './user.service';
 import {catchError, tap} from 'rxjs/internal/operators';
-import {Observable} from 'rxjs/index';
+import {throwError} from 'rxjs';
 
 export interface User {
   id: string;
@@ -32,13 +32,12 @@ export class UserState {
   loadAll(ctx: StateContext<UserStateModel>, action: LoadAll) {
     console.debug('UserState::loadAll() | method called');
     return this.repository.getErrorObservable().pipe(
-      catchError(err => {
-        console.debug('finally');
-        return Observable.throw(err);
+      catchError((x, caught) => {
+        console.debug('inside catchError', x);
+        return throwError(x);
       }),
-      tap(x => console.debug('reached state again, x')),
       tap((user: {[id: string]: User}) => {
-        console.log('updating state', user);
+        console.debug('updating state', user);
         const state = ctx.getState();
         ctx.setState({
           ...state,
